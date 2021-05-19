@@ -31,7 +31,7 @@ class Profile {
 		return el;
 	}
 
-	attributeElement(text, type, opts) {
+	attributeElement(name, text, type, opts) {
 		let el = document.createElement(type)
 		for (const [opt, value] of Object.entries(opts)) {
 			el.style[opt] = value;
@@ -44,7 +44,7 @@ class Profile {
 				el.value = el.value.trim();
 				el.value = el.value.replace("\n", "");
 				el.cols = el.value.length + 1;
-				this.name = el.value;
+				this[name] = el.value;
 			}
 		} else {
 			el.innerHTML = text;
@@ -56,11 +56,11 @@ class Profile {
 	asHtml(container, index) {
 		let div = document.createElement("div");
 		div.appendChild(this.descriptorElement("Money: "));
-		div.appendChild(this.attributeElement("$", "p", { color: MONEY_COLOR }));
-		div.appendChild(this.attributeElement(this.money.toString(), "textarea", { color: MONEY_COLOR }));
+		div.appendChild(this.attributeElement("", "$", "p", { color: MONEY_COLOR }));
+		div.appendChild(this.attributeElement("money", this.money.toString(), "textarea", { color: MONEY_COLOR }));
 		div.appendChild(this.descriptorElement("Name: "));
-		div.appendChild(this.attributeElement(this.name.toString(), "textarea", { color: NAME_COLOR }));
-		let close_button = this.attributeElement("X", "button", { color: X_COLOR });
+		div.appendChild(this.attributeElement("name", this.name.toString(), "textarea", { color: NAME_COLOR }));
+		let close_button = this.attributeElement("", "X", "button", { color: X_COLOR });
 		close_button.onclick = () => {
 			container.profiles.splice(index, 1);
 			container.render();
