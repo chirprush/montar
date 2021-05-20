@@ -1,5 +1,6 @@
 const BACKGROUND_COLOR = "#282c34";
 const UI_COLOR = "#1d2025";
+const SELECTED_COLOR = "#22252a";
 
 const TEXT_COLOR = "#abb2bf";
 
@@ -11,6 +12,7 @@ const DEFAULT_MONEY = 2000;
 
 class Container {
 	constructor(profiles) {
+		this.selected = 0;
 		this.profiles = profiles;
 	}
 
@@ -28,6 +30,9 @@ class Profile {
 		this.money = money.toString();
 		this.money_change = "";
 		this.name = name;
+		this.dice1 = 0;
+		this.dice2 = 0;
+		this.roll_state = "begin";
 	}
 
 	descriptorElement(name) {
@@ -59,8 +64,42 @@ class Profile {
 		return el;
 	}
 
+	diceElement() {
+		let el = document.createElement("img");
+		el.src = "";
+		el.className = "dice-image";
+		return el;
+	}
+
+	roll(container, roll_button, dice_one, dice_two) {
+		if (this.roll_state === "next") {
+			this.dice1 = 0;
+			this.dice2 = 0;
+			this.roll_state = "begin";
+			container.selected = (container.selected + 1) % container.profiles.length;
+			container.render();
+			return;
+		}
+		this.dice1 = Math.floor(Math.random() * 6) + 1;
+		this.dice2 = Math.floor(Math.random() * 6) + 1;
+		dice_one.width = "40";
+		dice_one.height = "40";
+		dice_two.width = "40";
+		dice_two.height = "40";
+		dice_one.src = "assets/dice_" + this.dice1 + ".png";
+		dice_two.src = "assets/dice_" + this.dice2 + ".png";
+		if (this.dice1 !== this.dice2) {
+			this.roll_state = "next";
+			roll_button.innerHTML = "Next";
+		}
+	}
+
 	asHtml(container, index) {
 		let div = document.createElement("div");
+		let selected = container.selected === index;
+		if (selected) {
+			div.style["background-color"] = SELECTED_COLOR;
+		}
 		div.appendChild(this.descriptorElement("Money: "));
 		div.appendChild(this.attributeElement("", "$", "p", { color: MONEY_COLOR }));
 		div.appendChild(this.attributeElement("money", this.money.toString(), "textarea", { color: MONEY_COLOR }));
@@ -92,11 +131,32 @@ class Profile {
 			container.render();
 		}
 		div.appendChild(deposit_button);
+		if (selected) {
+			let dice_one = this.diceElement();
+			let dice_two = this.diceElement();
+			if (!(this.roll_state === "begin")) {
+				dice_one.src = "assets/dice_" + this.dice1 + ".png";
+				dice_two.src = "assets/dice_" + this.dice2 + ".png";
+				dice_one.width = "40";
+				dice_one.height = "40";
+				dice_two.width = "40";
+				dice_two.height = "40";
+			}
+			let roll_button = this.attributeElement("", "Roll", "p", { color: TEXT_COLOR, "margin-left": "50px" });
+			roll_button.onclick = () => this.roll(container, roll_button, dice_one, dice_two);
+			roll_button.className = "profile-button";
+			div.appendChild(roll_button);
+			div.appendChild(dice_one);
+			div.appendChild(dice_two);
+		}
 		let close_button = this.attributeElement("", "X", "p", { color: X_COLOR });
 		close_button.onclick = () => {
 			container.profiles.splice(index, 1);
 			container.render();
 		};
+		if (selected) {
+			close_button.style["background-color"] = SELECTED_COLOR;
+		}
 		close_button.className = "close-button";
 		div.appendChild(close_button);
 		div.className = "profile";
