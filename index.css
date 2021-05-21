@@ -18,6 +18,10 @@ body {
 	color: #abb2bf;
 }
 
+#append-button:hover {
+	background-color: #202328;
+}
+
 .profile {
 	background: #1d2025;
 	margin: auto;
@@ -46,6 +50,11 @@ body {
 	font-family: "Lucida Console", "Courier New", monospace;
 }
 
+.profile textarea:hover {
+	background-color: #30343c;
+}
+
+
 .profile .close-button {
 	display: inline-block;
 	float: right;
@@ -60,6 +69,10 @@ body {
 .profile .profile-button {
 	background-color: #282c34;
 	padding: 0.0625em 0.25em;
+}
+
+.profile .profile-button:hover {
+	background-color: #30343c;
 }
 
 .profile .dice-image {
