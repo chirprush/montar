@@ -134,7 +134,7 @@ class Profile {
 		if (selected) {
 			let dice_one = this.diceElement();
 			let dice_two = this.diceElement();
-			if (!(this.roll_state === "begin")) {
+			if (this.dice1 || this.dice2) {
 				dice_one.src = "assets/dice_" + this.dice1 + ".png";
 				dice_two.src = "assets/dice_" + this.dice2 + ".png";
 				dice_one.width = "40";
