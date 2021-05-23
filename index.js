@@ -155,6 +155,7 @@ class Profile {
 		let close_button = this.attributeElement("", "X", "p", { color: X_COLOR });
 		close_button.onclick = () => {
 			container.profiles.splice(index, 1);
+			container.selected = container.selected % container.profiles.length
 			container.render();
 		};
 		if (selected) {
