@@ -143,6 +143,9 @@ class Profile {
 				dice_two.height = "40";
 			}
 			let roll_button = this.attributeElement("", "Roll", "p", { color: TEXT_COLOR, "margin-left": "50px" });
+			if (this.roll_state === "next") {
+				roll_button.innerHTML = "Next";
+			}
 			roll_button.onclick = () => this.roll(container, roll_button, dice_one, dice_two);
 			roll_button.className = "profile-button";
 			div.appendChild(roll_button);
